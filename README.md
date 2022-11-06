@@ -81,22 +81,18 @@ You can write semantic actions by extending the generated parser class.
 For example, if you want to evaluate the input expression, you can write semantic actions as follows:
 
 ```ts
-import assert from 'assert';
 import { Expression, Factor, Parser, Term, NodeTerminal } from './parser';
 
 export class Calculator extends Parser {
-  override Factor(node: Factor) {
-    const [number, parenthesizedExpression] = node;
+  override Factor([number, parenthesizedExpression]: Factor) {
     if (number) {
       return number.value;
     }
-    assert(parenthesizedExpression);
     const [, expr] = parenthesizedExpression;
     return expr.value;
   }
 
-  override Term(node: Term) {
-    const [factor, rest] = node;
+  override Term([factor, rest]: Term) {
     return rest.reduce(
       (acc, [[mul], factor]): number =>
         mul ? acc * factor.value : acc / factor.value,
@@ -104,8 +100,7 @@ export class Calculator extends Parser {
     );
   }
 
-  override Expression(node: Expression) {
-    const [term, rest] = node;
+  override Expression([term, rest]: Expression) {
     return rest.reduce(
       (acc, [[add], term]): number =>
         add ? acc + term.value : acc - term.value,
@@ -114,7 +109,7 @@ export class Calculator extends Parser {
   }
 
   override Number(node: NodeTerminal) {
-    return parseInt(node[0].text);
+    return parseInt(node.text);
   }
 }
 ```

@@ -12,6 +12,7 @@ import {
   OneOrMore,
   Optional,
   OrderedChoice,
+  peToString,
   Rewriting,
   Rule,
   Sequence,
@@ -56,9 +57,17 @@ class TypeGenerator implements IParsingExpressionVisitor<[], string> {
   }
 
   visitOrderedChoice(pe: OrderedChoice): string {
-    return `[${pe.operands
-      .map((operand, index) => `choiceItem${index}?:${operand.accept(this)}`)
-      .join(', ')}]`;
+    return pe.operands
+      .map(
+        (operand, i) =>
+          `[${pe.operands
+            .map(
+              (_, j) =>
+                `choiceItem${j}:${i === j ? operand.accept(this) : null}`
+            )
+            .join(', ')}]`
+      )
+      .join(' | ');
   }
 
   visitGrouping(pe: Grouping): string {
@@ -82,11 +91,21 @@ class TypeGenerator implements IParsingExpressionVisitor<[], string> {
   }
 }
 
+function escapeStar(s: string) {
+  return s.replace('*', '\\*');
+}
+
+function makeComment(rule: Rule) {
+  return `/** ${rule.symbol} <- ${escapeStar(peToString(rule.rhs))} */`;
+}
+
 function generateTypes(rules: Rule[]): string {
   const typeGenerator = new TypeGenerator();
   return rules
     .map(
-      (rule) => `export type ${rule.symbol} = ${rule.rhs.accept(typeGenerator)}`
+      (rule) => `
+      ${makeComment(rule)}
+      export type ${rule.symbol} = ${rule.rhs.accept(typeGenerator)}`
     )
     .join('\n');
 }
@@ -98,7 +117,11 @@ function generateVisitor(rules: Rule[]): string {
         rule.rhs instanceof Sequence || rule.rhs instanceof OrderedChoice
           ? `[${rule.rhs.operands.map((_value, index) => `item${index}`)}]`
           : `node`;
-      return `${rule.symbol}(${arg}: ${rule.symbol}): sv.${rule.symbol}{return ${arg} as any}`;
+      return `
+      ${makeComment(rule)}
+      ${rule.symbol}(${arg}: ${rule.symbol}): sv.${
+        rule.symbol
+      }{return ${arg} as any}`;
     })
     .join('\n');
   return `
