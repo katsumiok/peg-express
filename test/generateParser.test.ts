@@ -7,7 +7,7 @@ import { generateParser } from '../bin/generateParser';
 describe('generateParser', () => {
   it('should parse', () => {
     const grammar = `
-        Program <- <<>> 'a' ('a' / 'b') 'a'* 'a'+ 'a'? !'a' &'a' 'a':'a' 'a':!'b' A -> 'b'
+        Program <- <<>> 'a' ('a' / 'b') 'a'* 'a'+ 'a'? !'a' &'a' 'a':'a' 'a':!'b' (A -> 'b')
         A <- 'a'
         `;
     const peg = parseGrammar(grammar);

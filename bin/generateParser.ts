@@ -30,15 +30,15 @@ class TypeGenerator implements IParsingExpressionVisitor<[], string> {
   }
 
   visitZeroOrMore(pe: ZeroOrMore): string {
-    return `Array<${pe.operand.accept(this)}>`;
+    return `${pe.operand.accept(this)}[]`;
   }
 
   visitOneOrMore(pe: OneOrMore): string {
-    return `Array<${pe.operand.accept(this)}>`;
+    return `${pe.operand.accept(this)}[]`;
   }
 
   visitOptional(pe: Optional): string {
-    return `Array<${pe.operand.accept(this)}>`;
+    return `${pe.operand.accept(this)}[]`;
   }
 
   visitAnd(_pe: And): string {
@@ -50,12 +50,14 @@ class TypeGenerator implements IParsingExpressionVisitor<[], string> {
   }
 
   visitSequence(pe: Sequence): string {
-    return `[${pe.operands.map((operand) => operand.accept(this)).join(', ')}]`;
+    return `[${pe.operands
+      .map((operand, index) => `seqItem${index}:${operand.accept(this)}`)
+      .join(', ')}]`;
   }
 
   visitOrderedChoice(pe: OrderedChoice): string {
     return `[${pe.operands
-      .map((operand) => `${operand.accept(this)}?`)
+      .map((operand, index) => `choiceItem${index}?:${operand.accept(this)}`)
       .join(', ')}]`;
   }
 
@@ -91,10 +93,13 @@ function generateTypes(rules: Rule[]): string {
 
 function generateVisitor(rules: Rule[]): string {
   const body = rules
-    .map(
-      (rule) =>
-        `${rule.symbol}(node: ${rule.symbol}): sv.${rule.symbol}{return node as any}`
-    )
+    .map((rule) => {
+      const arg =
+        rule.rhs instanceof Sequence || rule.rhs instanceof OrderedChoice
+          ? `[${rule.rhs.operands.map((_value, index) => `item${index}`)}]`
+          : `node`;
+      return `${rule.symbol}(${arg}: ${rule.symbol}): sv.${rule.symbol}{return ${arg} as any}`;
+    })
     .join('\n');
   return `
   export class Parser extends BaseParser {

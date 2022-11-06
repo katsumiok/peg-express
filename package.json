@@ -1,6 +1,6 @@
 {
   "name": "peg-express",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "a PEG-based parser generator for TypeScript",
   "keywords": [
     "parser",
@@ -22,6 +22,10 @@
   },
   "author": "Katsumi Okuda",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ok-da/peg-express"
+  },
   "devDependencies": {
     "@babel/parser": "^7.20.2",
     "@types/command-line-args": "^5.2.0",
