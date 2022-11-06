@@ -20,7 +20,7 @@ To install peg-express, run the following command in the project directory:
 $ npm install peg-express
 ```
 
-## Usage
+## Getting Started
 
 To use peg-express, you need to write a grammar definition and optional semantic actions.
 Without semantics actions, generated parsers create a parse tree of the input.
@@ -33,7 +33,7 @@ Typical steps to use peg-express are:
 3. Write semantic actions by inheriting the generated parser.
 4. Use the parser.
 
-## Step1: Write a grammar definition in PEG
+### Step1: Write a grammar definition in PEG
 
 peg-express uses PEG for grammar definition.
 PEG is a simple and powerful grammar definition language.
@@ -53,7 +53,7 @@ Note that you can use regular expressions in the grammar definition.
 `r` is a prefix of a regular expression literal.
 You can write arbitrary JavaScript regular expressions between the prefix `r'` and `'`.
 
-## Step2: Generate a parser from the grammar definition
+### Step2: Generate a parser from the grammar definition
 
 To generate a parser from the grammar definition, run the following command:
 
@@ -72,7 +72,7 @@ peg-express calculator.peg
 
 This generates a parser file `parser.ts` in the current directory.
 
-## Step3: Write semantic actions by inheriting the generated parser
+### Step3: Write semantic actions by inheriting the generated parser
 
 This step is optional.
 If you do not write semantic actions, the generated parser creates a parse tree of the input.
@@ -114,13 +114,13 @@ export class Calculator extends Parser {
 }
 ```
 
-When you write the above code, the IDE (e.g., VSCode) can provide code completion and type checking for semantic actions as follows:
+When you write the above code, the IDE (e.g., VSCode) can provide code completion and type-checking for semantic actions as follows:
 
-<img src="https://github.com/ok-da/peg-express/blob/main/images/screen.gif?raw=true" width="350">
+<img src="https://github.com/ok-da/peg-express/blob/main/images/screen.gif?raw=true" width="550">
 
 The `parser` class implements default semantic actions that you can override.
 
-## Step4: Use the parser
+### Step4: Use the parser
 
 You can use the generated parser by instantiating the parser class and calling `parse()` method.
 If you extend the generated parser class, you need to instantiate the extended class.
@@ -140,3 +140,68 @@ if (result instanceof Error) {
 ```
 
 The output of the above program is `9`.
+
+## PEG Syntax
+
+A rule in PEG is defined as follows:
+
+```peg
+name <- parsing_expression
+```
+
+`name` is a rule name called a nonterminal symbol.
+`parsing_expression` is a sequence of one or more parsing expressions.
+
+`peg-express` supports the following parsing expressions:
+
+| Expression         | Example   | Description                             |
+| ------------------ | --------- | --------------------------------------- |
+| wildcard           | .         | matches any character                   |
+| string             | `'abc'`   | Matches the character string `abc`.     |
+| regular expression | `r'abc'`  | Matches the regular expression `/abc/`. |
+| nonterminal symbol | `name`    | Matches the rule `name`.                |
+| ordered choice     | `e1 / e2` | Matches `e1` or `e1`.                   |
+| sequence           | `e1 e2`   | Matches `e1` and `e2`.                  |
+| zero or more       | `e*`      | Matches zero or more `e`.               |
+| one or more        | `e+`      | Matches one or more `e`.                |
+| optional           | `e?`      | Matches `e` or nothing.                 |
+| grouping           | `(e)`     | Matches `e`.                            |
+| and predicate      | `&e`      | Matches if `e` matches.                 |
+| not predicate      | `!e`      | Matches if `e` does not match.          |
+
+## Generating a Parser
+
+Generated parsers consist of the following two files:
+
+- `parser.ts`: The generated parser class.
+- `SemanticValue.ts`: The types of semantic values for each node in the parse tree.
+
+### Parser Class `parser.ts`
+
+`peg-express` generates a parser class from a grammar definition.
+The generated parser implements default semantic actions that you can override.
+An semantic action is a method that is called when a node in the parse tree is matched.
+The name of the semantic action is the same as the name of the node in the parse tree.
+In other words, the name of the semantic action is the same as the name of the rule in the grammar definition.
+The return value of the semantic action is the semantic value of the node in the parse tree.
+The parameter of the semantic action is a collection of placeholders each of which holds the semantic value of a child node in the parse tree.
+Its type depends on the right-hand side of the rule in the grammar definition.
+For example, if the right-hand side of the rule is `A B` where `A` and `B` are nonterminal symbols, the parameter of the semantic action is `[item0, item1]: [Value<SemanticValue.A>, Value<SemanticValue.B>]`.
+The type of each parsing expression is defined as follows:
+
+| Expression         | Example   | Type                                                 |
+| ------------------ | --------- | ---------------------------------------------------- |
+| wildcard           | .         | `NodeTerminal`                                       |
+| string             | `'abc'`   | `NodeTerminal`                                       |
+| regular expression | `r'abc'`  | `NodeTerminal`                                       |
+| nonterminal symbol | `name`    | `Value<SemanticType.name>`                           |
+| ordered choice     | `e1 / e2` | `[e1:Type(e1), e2: null] \| [e1:null, e2: Type(e2)]` |
+| sequence           | `e1 e2`   | `[e1:Type(e1), e2: Type(e2)]`                        |
+| zero or more       | `e*`      | `Type(e)[]`                                          |
+| one or more        | `e+`      | `Type(e)[]`                                          |
+| optional           | `e?`      | `Type(e)[]`                                          |
+| grouping           | `(e)`     | `Type(e)`                                            |
+| and predicate      | `&e`      | `null`                                               |
+| not predicate      | `!e`      | `null`                                               |
+
+In the above table, `Type(e)` is the type of the semantic value of the parsing expression `e`.
