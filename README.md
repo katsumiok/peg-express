@@ -1,5 +1,7 @@
 # peg-express
 
+[![DeepScan grade](https://deepscan.io/api/teams/19126/projects/22871/branches/681480/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19126&pid=22871&bid=681480)
+
 peg-express is a parser generator for TypeScript.
 It applies separation of concerns: grammar definition and semantic actions are separated.
 Grammar definition is written in pure Parsing Expression Grammar (PEG) and semantic actions are written in TypeScript.
