@@ -42,7 +42,7 @@
     "babel": "^6.23.0",
     "command-line-args": "^5.2.1",
     "eslint": "^8.25.0",
-    "pegisland": "^2.1.21",
+    "pegisland": "^2.1.22",
     "prettier": "^2.7.1"
   }
 }
