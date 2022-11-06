@@ -5,6 +5,8 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/278c3b46670c9a82a797/test_coverage)](https://codeclimate.com/github/ok-da/peg-express/test_coverage)
 [![DeepScan grade](https://deepscan.io/api/teams/19126/projects/22871/branches/681480/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19126&pid=22871&bid=681480)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3e0ed516b42246079248870153b2817e)](https://www.codacy.com/gh/ok-da/peg-express/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ok-da/peg-express&utm_campaign=Badge_Grade)
+
+<br>
 peg-express is a parser generator for TypeScript.
 It applies separation of concerns: grammar definition and semantic actions are separated.
 Grammar definition is written in pure Parsing Expression Grammar (PEG) and semantic actions are written in TypeScript.
