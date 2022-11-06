@@ -120,7 +120,9 @@ export class Calculator extends Parser {
 ```
 
 When you write the above code, the IDE (e.g., VSCode) can provide code completion and type checking for semantic actions as follows:
-![assistance](https://github.com/ok-da/peg-express/blob/main/images/screen.gif?raw=true)
+
+<img src="https://github.com/ok-da/peg-express/blob/main/images/screen.gif?raw=true" width="350">
+
 The `parser` class implements default semantic actions that you can override.
 
 ## Step4: Use the parser
