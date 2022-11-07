@@ -20,7 +20,10 @@
     "lint": "npx eslint src/*.ts test/*.ts",
     "build": "tsc"
   },
-  "author": "Katsumi Okuda",
+  "author": {
+    "name": "Katsumi Okuda",
+    "email": "peg-express@okuda.xyz"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
