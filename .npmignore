@@ -16,3 +16,4 @@ reports
 dist/jest.config.*
 junit.xml
 *.tgz
+images
