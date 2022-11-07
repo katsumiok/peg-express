@@ -9,8 +9,8 @@
 <br>
 peg-express is a parser generator for TypeScript.
 It applies separation of concerns: grammar definition and semantic actions are separated.
-Grammar definition is written in pure Parsing Expression Grammar (PEG) and semantic actions are written in TypeScript.
-Since peg-express generates support code for semantic actions, it is possible to write semantic actions with type-guided IDE support such as code completion.
+Grammar definition is written in pure Parsing Expression Grammar (PEG), and semantic actions are written in TypeScript.
+Since peg-express generates support code for semantic actions, it is possible to write semantic actions with type-guided IDE support, such as code completion.
 
 ## Installation
 
@@ -180,11 +180,11 @@ Generated parsers consist of the following two files:
 
 `peg-express` generates a parser class from a grammar definition.
 The generated parser implements default semantic actions that you can override.
-An semantic action is a method that is called when a node in the parse tree is matched.
+A semantic action is a method that is called when a node in the parse tree is matched.
 The name of the semantic action is the same as the name of the node in the parse tree.
 In other words, the name of the semantic action is the same as the name of the rule in the grammar definition.
 The return value of the semantic action is the semantic value of the node in the parse tree.
-The parameter of the semantic action is a collection of placeholders each of which holds the semantic value of a child node in the parse tree.
+The parameter of the semantic action is a collection of placeholders, each of which holds the semantic value of a child node in the parse tree.
 Its type depends on the right-hand side of the rule in the grammar definition.
 For example, if the right-hand side of the rule is `A B` where `A` and `B` are nonterminal symbols, the parameter of the semantic action is `[item0, item1]: [Value<SemanticValue.A>, Value<SemanticValue.B>]`.
 The type of each parsing expression is defined as follows:
@@ -205,3 +205,11 @@ The type of each parsing expression is defined as follows:
 | not predicate      | `!e`      | `null`                                               |
 
 In the above table, `Type(e)` is the type of the semantic value of the parsing expression `e`.
+
+## License
+
+MIT License
+
+## Feedback
+
+If you have any questions or comments, please contact me at [peg-express@okuda.xyz](mailto:peg-express@okuda.xyz)
