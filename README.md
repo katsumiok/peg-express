@@ -154,20 +154,20 @@ name <- parsing_expression
 
 `peg-express` supports the following parsing expressions:
 
-| Expression         | Example   | Description                             |
-| ------------------ | --------- | --------------------------------------- |
-| wildcard           | .         | matches any character                   |
-| string             | `'abc'`   | Matches the character string `abc`.     |
-| regular expression | `r'abc'`  | Matches the regular expression `/abc/`. |
-| nonterminal symbol | `name`    | Matches the rule `name`.                |
-| ordered choice     | `e1 / e2` | Matches `e1` or `e1`.                   |
-| sequence           | `e1 e2`   | Matches `e1` and `e2`.                  |
-| zero or more       | `e*`      | Matches zero or more `e`.               |
-| one or more        | `e+`      | Matches one or more `e`.                |
-| optional           | `e?`      | Matches `e` or nothing.                 |
-| grouping           | `(e)`     | Matches `e`.                            |
-| and predicate      | `&e`      | Matches if `e` matches.                 |
-| not predicate      | `!e`      | Matches if `e` does not match.          |
+| Expression         | Example   | Description                            |
+| ------------------ | --------- | -------------------------------------- |
+| wildcard           | .         | Matches any character.                 |
+| string             | `'abc'`   | Matches the character string `abc`.    |
+| regular expression | `r'abc'`  | Is equivalent to `/abc/` in TypeScript |
+| nonterminal symbol | `name`    | Matches the rule `name`.               |
+| ordered choice     | `e1 / e2` | Matches `e1` or `e1`.                  |
+| sequence           | `e1 e2`   | Matches `e1` and `e2`.                 |
+| zero or more       | `e*`      | Matches zero or more `e`.              |
+| one or more        | `e+`      | Matches one or more `e`.               |
+| optional           | `e?`      | Matches `e` or nothing.                |
+| grouping           | `(e)`     | Matches `e`.                           |
+| and predicate      | `&e`      | Matches if `e` matches.                |
+| not predicate      | `!e`      | Matches if `e` does not match.         |
 
 ## Generating a Parser
 
