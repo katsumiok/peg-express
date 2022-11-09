@@ -37,8 +37,7 @@ class Converter implements IParseTreeVisitor<[object], unknown> {
 
   visitOrderedChoice(node: NodeOrderedChoice, visitor: object): unknown {
     return [...Array(node.index + 1)].map((_, i) =>
-      // eslint-disable-next-line no-undefined
-      node.index === i ? node.childNodes[0].accept(this, visitor) : undefined
+      node.index === i ? node.childNodes[0].accept(this, visitor) : null
     );
   }
 
