@@ -1,7 +1,7 @@
 {
   "name": "peg-express",
   "version": "0.2.1",
-  "description": "a PEG-based parser generator for TypeScript",
+  "description": "A PEG-based parser generator for TypeScript",
   "keywords": [
     "parser",
     "packrat parser",
