@@ -84,12 +84,12 @@ For example, if you want to evaluate the input expression, you can write semanti
 import { Expression, Factor, Parser, Term, NodeTerminal } from './parser';
 
 export class Calculator extends Parser {
-  override Factor([number, parenthesizedExpression]: Factor) {
-    if (number) {
-      return number.value;
-    }
-    const [, expr] = parenthesizedExpression;
-    return expr.value;
+  override Expression([term, rest]: Expression) {
+    return rest.reduce(
+      (acc, [[add], term]): number =>
+        add ? acc + term.value : acc - term.value,
+      term.value
+    );
   }
 
   override Term([factor, rest]: Term) {
@@ -100,16 +100,16 @@ export class Calculator extends Parser {
     );
   }
 
-  override Expression([term, rest]: Expression) {
-    return rest.reduce(
-      (acc, [[add], term]): number =>
-        add ? acc + term.value : acc - term.value,
-      term.value
-    );
+  override Factor([number, parenthesizedExpression]: Factor) {
+    if (number) {
+      return number.value;
+    }
+    const [, expr] = parenthesizedExpression;
+    return expr.value;
   }
 
   override Number(node: NodeTerminal) {
-    return parseInt(node.text);
+    return parseInt(node.text, 10);
   }
 }
 ```
@@ -206,6 +206,24 @@ The type of each parsing expression is defined as follows:
 
 In the above table, `Type(e)` is the type of the semantic value of the parsing expression `e`.
 
+## Type definitions for semantic values `SemanticValue.ts`
+
+`peg-express` generates a type definition file for semantic values.
+By default, the type of the semantic value of each node in the parse tree is `any`.
+You can override the default type by specifying the type of the semantic value in the grammar definition.
+This enables the IDE to provide better type checking when you write semantic actions.
+
+For example, if you want to specify the type of the semantic value of the `Expression` node as `number`, you can modify the type definition for the `Expression` node as follows:
+
+```ts
+type Expression = number;
+```
+
+When you accidentally write a semantic action that returns a value of a different type, the IDE will notify you of the error.
+
+Currently, `SemanticValue.ts` is overwritten every time you generate a parser.
+In the future, `peg-express` will support the update of the type definition file.
+
 ## License
 
 MIT License
@@ -213,3 +231,7 @@ MIT License
 ## Feedback
 
 If you have any questions or comments, please contact me at [peg-express@okuda.xyz](mailto:peg-express@okuda.xyz)
+
+```
+
+```
